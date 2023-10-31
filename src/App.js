@@ -91,9 +91,9 @@ export default function App({ $target, initialState }) {
     const route = async () => {
         const {pathname} = window.location
 
-        $target.innerHTML = ''
-
-        $target.appendChild($listContainer)
+        if ($target.contains($editorContainer)) {
+            $target.removeChild($editorContainer)
+        }
 
         if (pathname.startsWith('/posts/')) {
             const id = pathname.split('/posts/')[1]
@@ -121,6 +121,8 @@ export default function App({ $target, initialState }) {
             postList,
             selectedPost: null
         })
+
+        $target.appendChild($listContainer)
 
         route()
 

@@ -14,7 +14,6 @@ export default function PostEditSection({$target, initialState, onChangeList}) {
             content: this.state.content
         })
 
-        
         this.buttonsRender()
     }
 
@@ -22,7 +21,10 @@ export default function PostEditSection({$target, initialState, onChangeList}) {
 
     const editor = new PostEditor({
         $target,
-        initialState: this.state,
+        initialState: {
+            title: this.state.title,
+            content: this.state.content,
+        },
         onEdit: (post) => {
             const {id} = this.state
 
