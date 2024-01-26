@@ -1,74 +1,77 @@
-import { fetchPost } from "../api/fetch.js"
-import ChildrenPostButton from "../components/postEditSection/ChilderenPostButton.js"
-import PostEditor from "../components/postEditSection/PostEditor.js"
+import { fetchPost } from "../api/fetch.js";
+import ChildrenPostButton from "../components/postEditSection/ChilderenPostButton.js";
+import PostEditor from "../components/postEditSection/PostEditor.js";
 
-export default function PostEditSection({$target, initialState, onChangeList}) {
-    
-    this.state = initialState
+export default function PostEditSection({
+  $target,
+  initialState,
+  onChangeList,
+}) {
+  this.state = initialState;
 
-    this.setState = (newState) => {
-        this.state = newState
+  this.setState = (newState) => {
+    this.state = newState;
 
-        editor.setState({
-            title: this.state.title,
-            content: this.state.content
-        })
+    editor.setState({
+      title: this.state.title,
+      content: this.state.content,
+    });
 
-        this.buttonsRender()
-    }
+    this.buttonsRender();
+  };
 
-    let timer = null
+  let timer = null;
 
-    const editor = new PostEditor({
-        $target,
-        initialState: {
-            title: this.state.title,
-            content: this.state.content,
-        },
-        onEdit: (post) => {
-            const {id} = this.state
+  const editor = new PostEditor({
+    $target,
+    initialState: {
+      title: this.state.title,
+      content: this.state.content,
+    },
+    onEdit: (post) => {
+      const { id } = this.state;
 
-            if (id) {
-                if (timer) {
-                    clearTimeout(timer)
-                }
-
-                timer = setTimeout(async () => {
-                    await fetchPost(id, {
-                        method: 'PUT',
-                        body: JSON.stringify(post)
-                    })
-
-                    if (this.state.title !== post.title) {
-                        await onChangeList(post)
-                    }
-                    
-                    this.setState({
-                        ...this.state,
-                        title: post.title,
-                        content: post.content
-                    })
-                }, 1000)
-            }
+      if (id) {
+        if (timer) {
+          clearTimeout(timer);
         }
-    })
 
-    this.buttonsRender = () => {
-        const $editor = $target.querySelector('div')
-        $target.replaceChildren($editor)
+        timer = setTimeout(async () => {
+          await fetchPost(id, {
+            method: "PUT",
+            body: JSON.stringify(post),
+          });
 
-        if (this.state.documents.length)  {
-            const $childButton = document.createElement('div')
-            $childButton.className = 'postFooter'
-            $target.appendChild($childButton)
+          if (this.state.title !== post.title) {
+            await onChangeList(post);
+          }
 
-            this.state.documents.forEach((post) => {
-                new ChildrenPostButton({
-                    $target: $childButton,
-                    title: post.title ? post.title : 'Untitled',
-                    id: post.id
-                })
-            })
-        }
+          this.setState({
+            ...this.state,
+            title: post.title,
+            content: post.content,
+          });
+        }, 1000);
+      }
+    },
+  });
+
+  this.buttonsRender = () => {
+    const $editor = $target.querySelector("div");
+    $target.replaceChildren($editor);
+
+    if (this.state.documents.length) {
+      const $childButton = document.createElement("div");
+      $childButton.className = "postFooter";
+      $target.appendChild($childButton);
+
+      this.state.documents.forEach((post) => {
+        new ChildrenPostButton({
+          $target: $childButton,
+          title: post.title ? post.title : "Untitled",
+          id: post.id,
+        });
+      });
     }
+  };
 }

@@ -1,13 +1,13 @@
-import App from "./App.js"
+import App from "./App.js";
 
-const $app = document.querySelector('.app')
+const $app = document.querySelector(".app");
 
 const initialState = {
-    postList: [],
-    selectedPost: {}
-}
+  postList: [],
+  selectedPost: {},
+};
 
 new App({
-    $target: $app,
-    initialState
-})
+  $target: $app,
+  initialState,
+});
